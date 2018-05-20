@@ -35,7 +35,7 @@ contract EmalPresale is EmalWhitelist {
     bool public presaleActive = false;
     
     // The main crodsale object
-    EmalCrowdsale public crowdsale;
+    EmalToken public emalToken;
     
     // Owner of the contract
     address owner;
@@ -93,13 +93,9 @@ contract EmalPresale is EmalWhitelist {
         // investments of the investor should be greater than 0
         require(msg.sender == owner && allocatedTokens[investorAddr] > 0);
         
-        ////////////
-        ////////////
-        // ToDo: Once the crodsale contract is developed. Write code to participate in the crowdsale
-        ////////////
-        ////////////
-        
         uint256 tokensToSend = allocatedTokens[investorAddr];
+
+        emalToken.transfer(investorAddr, tokensToSend);
         
         // Send all allocated tokens to the crowdsale
         allocatedTokens[investorAddr] = 0;
@@ -162,11 +158,11 @@ contract EmalPresale is EmalWhitelist {
     }
     
     /*
-    * Set the target crowdsale where we will move presale funds when the crowdsale opens.
+    * Set the target token
     */
-    function setCrowdsale(EmalCrowdsale _crowdsale) public returns (bool success){
+    function setToken(EmalToken addr) public returns (bool success){
         require(msg.sender == owner);
-        crowdsale = _crowdsale;
+        emalToken = addr;
         return true;
     }
 }
