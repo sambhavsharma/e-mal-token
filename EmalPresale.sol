@@ -1,8 +1,8 @@
 pragma solidity ^0.4.11;
 
-import './EmalCrowdsale.sol';
 import './SafeMath.sol';
 import './EmalWhitelist.sol';
+import './EmalToken.sol';
 
 /*
 * This smart contract builds on top of the crowdsale smart contract for eMal ICO.
@@ -38,7 +38,7 @@ contract EmalPresale is EmalWhitelist {
     EmalToken public emalToken;
     
     // Owner of the contract
-    address owner;
+    address public owner;
     
     // Event fired when tokens are allocated to an investor account
     event etherInvested(address investor, uint256 value);
@@ -160,9 +160,18 @@ contract EmalPresale is EmalWhitelist {
     /*
     * Set the target token
     */
-    function setToken(EmalToken addr) public returns (bool success){
+    function setToken(EmalToken token_addr) public returns (bool success){
         require(msg.sender == owner);
-        emalToken = addr;
+        emalToken = token_addr;
+        return true;
+    }
+
+    /*
+    * Set the owner of the contract
+    */
+    function setOwner(address new_owner) public returns (bool success){
+        require(msg.sender == owner);
+        owner = new_owner;
         return true;
     }
 }
