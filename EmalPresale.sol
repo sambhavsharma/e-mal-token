@@ -18,9 +18,12 @@ contract EmalPresale is EmalWhitelist {
     
     using SafeMath for uint256;
     
-    // Address of presale investtors
-    address[] public investors;
-    
+    // Total ether invested during the presale    
+    uint256 public totalEtherInvested = 0;
+
+    // Total token allocated during the presale
+    uint256 public totalTokensAllocated = 0;
+
     // Total of amount invested for an investor
     // This mapping helps when the pre sale investor directly sends ether to the contract
     mapping(address => uint256) public investedAmounts;
@@ -62,6 +65,7 @@ contract EmalPresale is EmalWhitelist {
         // Tokens to be allocated must be more than 0
         require( msg.sender == owner && tokenCount > 0);
         allocatedTokens[investorAddr] = allocatedTokens[investorAddr].add(tokenCount);
+        totalTokensAllocated = totalTokensAllocated.add(tokenCount);
         return true;
     }
     
@@ -74,6 +78,7 @@ contract EmalPresale is EmalWhitelist {
         // The address must has at least the number of tokens to be deducted
         require( msg.sender == owner && tokenCount > 0 && allocatedTokens[investorAddr] > tokenCount );
         allocatedTokens[investorAddr] = allocatedTokens[investorAddr].sub(tokenCount);
+        totalTokensAllocated = totalTokensAllocated.sub(tokenCount);
         return true;
     }
     
@@ -134,7 +139,13 @@ contract EmalPresale is EmalWhitelist {
         require(presaleActive && isWhitelisted(msg.sender));
         
         investedAmounts[msg.sender] = investedAmounts[msg.sender].add(msg.value);
+        totalEtherInvested = totalEtherInvested.add(msg.value);
         emit etherInvested(msg.sender, msg.value);
+    }
+
+    function getInvestedAmount(address investorAddr) public view returns (uint256 investedAmount){
+        // returns amount invested as ether by an investor, directly to the presale contract
+        return investedAmounts[investorAddr];   
     }
     
     /*
