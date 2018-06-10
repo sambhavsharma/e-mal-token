@@ -5,7 +5,6 @@ import './EmalWhitelist.sol';
 import './EmalToken.sol';
 
 /*
-* This smart contract builds on top of the crowdsale smart contract for eMal ICO.
 * This will collect funds from investors in ETH directly from the investor post which it will emit an event
 * The event will then be collected by eMal backend servers and based on the amount of ETH sent and ETH rate 
 * in terms of DHS, the tokens to be allocated will be calculated by the backend server and then it will call 
